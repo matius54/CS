@@ -39,19 +39,19 @@
         public function setPath($path) : void {
             $this->path = $path;
         }
-        function getSize() : int {
+        public function getSize() : int {
             return strlen($this->bytes);
         }
-        function getSizeKB(): float {
+        public function getSizeKB(): float {
             return $this->getSize() / 1000;
         }
-        function getSizeMB(): float {
+        public function getSizeMB(): float {
             return $this->getSizeKB() / 1000;
         }
-        function getSizeGB(): float {
+        public function getSizeGB(): float {
             return $this->getSizeMB() / 1000;
         }
-        function __toString(){
+        public function __toString(){
             return $this->getBytes();
         }
     }
