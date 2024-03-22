@@ -6,6 +6,75 @@
     "showErrors":true,
 
     "structure":{
+        "categoria" : [
+            "id INT PRIMARY KEY AUTO_INCREMENT"
+        ],
+        "dedicacion" : [
+            "id INT PRIMARY KEY AUTO_INCREMENT"
+        ],
+        "estudios_de_postgrado" : [
+            "id INT PRIMARY KEY AUTO_INCREMENT"
+        ],
+        "estudios_realizados" : [
+            "id INT PRIMARY KEY AUTO_INCREMENT",
+            "postgrado_id INT",
+            "FOREIGN KEY (postgrado_id) REFERENCES estudios_de_postgrado(id)"
+        ],
+        "unidades_curriculares_impartidas" : [
+            "id INT PRIMARY KEY AUTO_INCREMENT"
+        ],
+        "condicion" : [
+            "id INT PRIMARY KEY AUTO_INCREMENT"
+        ],
+        "datos_de_direccion" : [
+            "id INT PRIMARY KEY AUTO_INCREMENT",
+            "direccion VARCHAR(128)",
+            "estados VARCHAR(64)",
+            "ciudad VARCHAR(64)",
+            "urbanizacion VARCHAR(128)",
+            "calle VARCHAR(64)"
+        ],
+        "datos_de_contacto" : [
+            "id INT PRIMARY KEY AUTO_INCREMENT",
+            "telefono VARCHAR(64)",
+            "correo VARCHAR(128)"
+        ],
+        "datos_personales" : [
+            "id INT PRIMARY KEY AUTO_INCREMENT",
+            "direccion_id INT",
+            "contacto_id INT",
+            "nombre VARCHAR(256)",
+            "apellidos VARCHAR(256)",
+            "cedula VARCHAR(64)",
+            "rif VARCHAR(64)",
+            "fecha_nacimiento DATETIME",
+            "FOREIGN KEY (direccion_id) REFERENCES datos_de_direccion(id)",
+            "FOREIGN KEY (contacto_id) REFERENCES datos_de_contacto(id)"
+        ],
+        "profesores" : [
+            "id INT PRIMARY KEY AUTO_INCREMENT",
+            "personales_id INT",
+            "estudios_id INT",
+            "unidades_id INT",
+            "condicion_id INT",
+            "username VARCHAR(256)",
+            "hash BINARY(64)",
+            "salt BINARY(64)",
+            "FOREIGN KEY (personales_id) REFERENCES datos_personales(id)",
+            "FOREIGN KEY (estudios_id) REFERENCES estudios_realizados(id)",
+            "FOREIGN KEY (unidades_id) REFERENCES unidades_curriculares_impartidas(id)",
+            "FOREIGN KEY (condicion_id) REFERENCES condicion(id)"
+        ],
+        "cursos" : [
+            "id INT PRIMARY KEY AUTO_INCREMENT",
+            "profesor_id INT",
+            "FOREIGN KEY (profesor_id) REFERENCES profesores(id)"
+        ],
+        "seminarios" : [
+            "id INT PRIMARY KEY AUTO_INCREMENT",
+            "profesor_id INT",
+            "FOREIGN KEY (profesor_id) REFERENCES profesores(id)"
+        ]
     },
     
     "finally": [
