@@ -21,7 +21,9 @@
             "FOREIGN KEY (postgrado_id) REFERENCES estudios_de_postgrado(id)"
         ],
         "unidades_curriculares_impartidas" : [
-            "id INT PRIMARY KEY AUTO_INCREMENT"
+            "id INT PRIMARY KEY AUTO_INCREMENT",
+            "nombre VARCHAR(128)",
+            "peso INT DEFAULT 0"
         ],
         "condicion" : [
             "id INT PRIMARY KEY AUTO_INCREMENT"
@@ -45,8 +47,8 @@
             "contacto_id INT",
             "nombre VARCHAR(256)",
             "apellidos VARCHAR(256)",
-            "cedula VARCHAR(64)",
-            "rif VARCHAR(64)",
+            "cedula VARCHAR(20)",
+            "rif VARCHAR(32)",
             "fecha_nacimiento DATETIME",
             "FOREIGN KEY (direccion_id) REFERENCES datos_de_direccion(id)",
             "FOREIGN KEY (contacto_id) REFERENCES datos_de_contacto(id)"
