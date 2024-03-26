@@ -135,7 +135,7 @@ class DB {
      *
      * @return int valor del `PDO::PARAM` correspondiente al `$param`.
      */
-    private function getBindType(mixed $param) : int {
+    private function getBindType(int|string|bool|object $param) : int {
         if(is_int($param)){
             return PDO::PARAM_INT;
         }else if(is_string($param)){
@@ -251,7 +251,21 @@ class DB {
      *
      * @return void
      */
-    public function execute(string $sql,array $arg=[]) : void {
+    public function execute(string $sql, string|int|float|bool|array|File ...$arg) : void {
+        //esto es un arreglo para hacer que se
+        //puedan insertar float en la base de datos.
+        $index = 0;
+        if($arg and is_array($arg[0])) $arg = $arg[0];
+        foreach ($arg as $key => $value) {
+            $index = strpos($sql, "?",$index + 1);
+            if(is_float($value) or is_double($value)){
+                $a = substr($sql, 0 , $index);
+                $b = substr($sql, $index + 1);
+                $sql = $a.$value.$b;
+                unset($arg[$key]);
+            }
+        }
+        $arg = array_values($arg);
         try{
             $prepared = $this->conn->prepare($sql);
             foreach ($arg as $index => $value) {
