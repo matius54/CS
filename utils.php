@@ -68,7 +68,7 @@
         }
     }
     class VALIDATE {
-        public static function string($value,$maxLength=1024,$minLength=0,$length=null){
+        public static function string($value,$maxLength=1024,$minLength=0,$length=null) : bool {
             if(isset($value) && is_string($value)){
                 $strlength = strlen($value);
                 if($length == null){
@@ -93,41 +93,52 @@
             if(preg_match($regex_comma, $value))$value = implode(".",explode(",",$value));
             return preg_match($regex_dot,$value);
         }
-        public static function title($value,$minLength = 1,$maxLength = 255){
-            return self::string($value,$maxLength,$minLength);
+        public static function title($value, $minLength = 1, $maxLength = 255){
+            return self::string($value, $maxLength, $minLength);
         }
-        public static function username($value,$minLength = 3,$maxLength = 256){
-            return self::string($value,$maxLength,$minLength);
+        public static function username($value, $minLength = 3, $maxLength = 256){
+            return self::string($value, $maxLength, $minLength);
         }
-        public static function description($value,$minLength = 0,$maxLength = 65535){
-            return self::string($value,$maxLength,$minLength);
+        public static function name($value, $minLength = 3, $maxLength = 256){
+            return self::string($value, $maxLength, $minLength);
         }
-        public static function password($value,$maxLength = PHP_INT_MAX){
-            return self::string($value,$maxLength);
+        public static function ced($value){
+            $regex = "/^[VE]-\d{5,15}$/i";
+            return preg_match($regex, $value);
         }
-        public static function hash($value,$length = 64){
-            return self::string($value,null,null,$length) && ctype_xdigit($value);
+        public static function rif($value){
+            $regex = "/^[VE]-\d{5,20}$/i";
+            return preg_match($regex, $value);
         }
-        public static function salt($value,$length = 32){
-            return self::string($value,null,null,$length) && ctype_xdigit($value);
+        public static function description(string $value, int $minLength = 0,$maxLength = 65535){
+            return self::string($value, $maxLength, $minLength);
         }
-        public static function session($value,$length = 128){
-            return self::string($value,null,null,$length) && ctype_xdigit($value);
+        public static function password(string $value, int $maxLength = PHP_INT_MAX){
+            return self::string($value, $maxLength);
         }
-        public static function email($value,$maxLength = 100){
-            if(self::string($value,$maxLength)){
+        public static function hash(string $value, int $length = 64){
+            return self::string($value, null, null, $length) && ctype_xdigit($value);
+        }
+        public static function salt(string $value, int $length = 32){
+            return self::string($value, null, null, $length) && ctype_xdigit($value);
+        }
+        public static function session(string $value, int $length = 128){
+            return self::string($value, null, null, $length) && ctype_xdigit($value);
+        }
+        public static function email(string $value, int $maxLength = 100){
+            if(self::string($value, $maxLength)){
                 if(filter_var($value, FILTER_VALIDATE_EMAIL)) return true;
             }
             return false;
         }
-        public static function toInt($value){
+        public static function toInt(string|int $value){
             $intValue = intval($value);
             if($intValue == $value)
                 return $intValue;
 
             return null;
         }
-        public static function int2bool($value){
+        public static function int2bool(int $value){
             $value = self::toInt($value);
             $boolTable = [1=>true,0=>false];
             if($value!=null){
@@ -139,7 +150,7 @@
     class HTML {
         static $table_header = "<table border=\"1\">";
 
-        public static function matrix2table($matrix,$columnsNames=[]){
+        public static function matrix2table(array $matrix, array $columnsNames=[]){
             $result = self::$table_header;
             if(!empty($columnsNames))$result .= "<thead>".self::array2table($columnsNames,false)."</thead>";
             $result .= "<tbody>";
@@ -150,7 +161,7 @@
             return $result;
         }
         
-        public static function array2table($array,$includeTable = true){
+        public static function array2table(array $array, bool $includeTable = true){
             if($includeTable){
                 return self::$table_header.self::array2table($array,false)."</tbody></table>";
             }else{
@@ -158,12 +169,18 @@
             }
         }
         
-        public static function array2list(array $array, string $name = "select", ?string $title = null, $selected = null) : string {
+        public static function array2list(
+            array $array,
+            string $name = "select",
+            ?string $title = null,
+            $selected = null,
+            $sameValueName = false
+            ) : string {
             $result = "<select name=\"$name\">";
             if($title !== null and is_string($title))
                 $result .= "<option value=\"\">--- $title ---</option>";
             foreach ($array as $value => $dname) {
-                $result .= "<option ".($selected === $value ? "selected" : "")." value=\"$value\">$dname</option>";
+                $result .= "<option ".($selected === $value ? "selected" : "")." value=\"".($sameValueName ? $dname : $value)."\">$dname</option>";
             }
             $result .= "</select>";
             return $result;
@@ -199,7 +216,7 @@
             }
             return [];
         }
-        public static function sendJson($response){
+        public static function sendJson(array $response) : void {
             $json = json_encode($response);
             header("Content-Type: application/json; charset=utf-8");
             echo $json;

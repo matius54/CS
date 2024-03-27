@@ -5,8 +5,6 @@ function htmlList(
     selected = null,
     sameValueName = false
     ){
-    const duplicated = document.getElementsByName(name);
-    if(duplicated) duplicated.forEach(e => e.remove());
     const select = document.createElement("select");
     select.name = name;
     if(title){
