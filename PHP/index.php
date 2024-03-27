@@ -5,5 +5,7 @@
     <a href="#" class="button">opcion 2</a>
     <a href="#" class="button">opcion 3</a>
 </header>
-<main></main>
+<main>
+    
+</main>
 <?php include "../components/footer.php"; ?>
