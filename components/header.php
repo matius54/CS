@@ -1,5 +1,5 @@
 <?php
-    if(!isset($title)) $title = "titulo";
+    if(!isset($title)) $title = "TITULO";
 ?>
 <!DOCTYPE html>
 <html lang="es">
