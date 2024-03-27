@@ -1,6 +1,6 @@
 <?php
-    require_once "./ve.php";
-    require_once "./utils.php";
+    require_once "php/ve.php";
+    require_once "php/utils.php";
     $ve = new Ve;
     $info = JSON::getJson();
     $state = $info["state"] ?? "";

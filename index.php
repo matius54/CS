@@ -1,4 +1,4 @@
-<?php include "../components/header.php"; ?>
+<?php include "components/header.php"; ?>
 <header>
     <h1><?= $title ?></h1>
     <a href="#" class="button">opcion 1</a>
@@ -8,4 +8,4 @@
 <main>
     
 </main>
-<?php include "../components/footer.php"; ?>
+<?php include "components/footer.php"; ?>

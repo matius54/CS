@@ -1,6 +1,6 @@
 <?php
-include "../components/header.php";
-require_once "./utils.php";
+include "components/header.php";
+require_once "php/utils.php";
 /*
     require_once "db.php";
     $cn = DB::getInstance();
@@ -10,7 +10,7 @@ require_once "./utils.php";
     var_dump($result);
     */
 
-require_once "./ve.php";
+require_once "php/ve.php";
 $ve = new Ve;
 $states = $ve->states();
 echo HTML::array2list($states, "states", "selecciona el estado", sameValueName: true);
@@ -18,10 +18,10 @@ $cities = $ve->cities();
 echo HTML::array2list($cities, "cities", "selecciona tu ciudad", sameValueName: true);
 
 ?>
-<script src="../JS/ajax.js"></script>
-<script src="../JS/ve.js"></script>
-<script src="../JS/list.js"></script>
+<script src="js/ajax.js"></script>
+<script src="js/ve.js"></script>
+<script src="js/list.js"></script>
 <script>
     const ve = new Ve(document.querySelector("select[name=\"states\"]"), document.body);
 </script>
-<?php include "../components/footer.php" ?>
+<?php include "components/footer.php" ?>

@@ -1,7 +1,7 @@
 <?php
 class Ve {
     private $capitalRank = ["primary","admin","minor"];
-    private $fileName = "ve.json";
+    private $fileName = "php/ve.json";
     private $ve;
     public function __construct() {
         $this->ve = json_decode(json: file_get_contents(filename: $this->fileName),associative: true);
