@@ -5,10 +5,10 @@
     class Paginator {
         private static $ItemsPerPage = 10;
         private static $pageKey = "page";
-        public $items;
-        public $navigator;
+        public array $items;
+        public string $navigator;
 
-        public function __construct(string $sql, array $args){
+        public function __construct(string $sql, array $args = []){
             [$this->items, $this->navigator] = $this->paginate($sql, $args);
         }
         
@@ -37,7 +37,7 @@
             $offset = ($page-1) * self::$ItemsPerPage;
 
             $db = DB::getInstance();
-            $db->execute($sql." ORDER BY id DESC LIMIT ? OFFSET ?",array_merge($args,[$limit, $offset]));
+            $db->execute($sql." LIMIT ? OFFSET ?",array_merge($args,[$limit, $offset]));
             return $db->fetchAll(htmlspecialchars: true);
         }
 
