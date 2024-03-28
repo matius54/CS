@@ -20,7 +20,7 @@ class DB
     private static ?DB $instance = null;
 
     //ubicacion del archivo de configuracion
-    private String $configFile = "../JS/db.json"; /*----- Cambie la direccion antes era esta ./db.json -----*/
+    private String $configFile = "db.json"; /*----- Cambie la direccion antes era esta ./db.json -----*/
 
     //array del archivo de configuracion una vez decodificado del json
     private array $config;
