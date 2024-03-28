@@ -102,7 +102,38 @@
         public static function name($value, $minLength = 3, $maxLength = 256){
             return self::string($value, $maxLength, $minLength);
         }
-        public static function ced($value){
+        public static function firstname($value, $minLength = 3, $maxLength = 256){
+            //TODO
+            return true;
+        }
+        public static function lastname($value, $minLength = 3, $maxLength = 256){
+            //TODO
+            return true;
+        }
+        public static function birthdate($value, $minLength = 3, $maxLength = 256){
+            return self::date($value);
+        }
+        public static function address($value){
+            //TODO
+            return true;
+        }
+        public static function date($value){
+            //TODO
+            return true;
+        }
+        public static function phone($value){
+            //TODO
+            return true;
+        }
+        public static function state($value){
+            //TODO
+            return true;
+        }
+        public static function city($value){
+            //TODO
+            return true;
+        }
+        public static function ci($value){
             $regex = "/^[VE]-\d{5,15}$/i";
             return preg_match($regex, $value);
         }
@@ -110,22 +141,22 @@
             $regex = "/^[VE]-\d{5,20}$/i";
             return preg_match($regex, $value);
         }
-        public static function description(string $value, int $minLength = 0,$maxLength = 65535){
+        public static function description($value, int $minLength = 0,$maxLength = 65535){
             return self::string($value, $maxLength, $minLength);
         }
-        public static function password(string $value, int $maxLength = PHP_INT_MAX){
+        public static function password($value, int $maxLength = PHP_INT_MAX){
             return self::string($value, $maxLength);
         }
-        public static function hash(string $value, int $length = 64){
+        public static function hash($value, int $length = 64){
             return self::string($value, null, null, $length) && ctype_xdigit($value);
         }
-        public static function salt(string $value, int $length = 32){
+        public static function salt($value, int $length = 32){
             return self::string($value, null, null, $length) && ctype_xdigit($value);
         }
-        public static function session(string $value, int $length = 128){
+        public static function session($value, int $length = 128){
             return self::string($value, null, null, $length) && ctype_xdigit($value);
         }
-        public static function email(string $value, int $maxLength = 100){
+        public static function email($value, int $maxLength = 100){
             if(self::string($value, $maxLength)){
                 if(filter_var($value, FILTER_VALIDATE_EMAIL)) return true;
             }
@@ -150,7 +181,8 @@
     class HTML {
         static $table_header = "<table border=\"1\">";
 
-        public static function matrix2table(array $matrix, array $columnsNames=[]){
+        public static function matrix2table(array $matrix, array $columnsNames = null){
+            if($columnsNames === null) $columnsNames = array_keys($matrix[0]);
             $result = self::$table_header;
             if(!empty($columnsNames))$result .= "<thead>".self::array2table($columnsNames,false)."</thead>";
             $result .= "<tbody>";
