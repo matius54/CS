@@ -44,7 +44,7 @@ include "index.php";
             </div>
         </fieldset>
     </div>
-    <button type="submit" class="button-post">
+    <button type="submit" class="btn w-25 m-auto">
         Guardar Datos
     </button>
 </form>
