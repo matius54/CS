@@ -31,10 +31,8 @@
         "datos_de_direccion" : [
             "id INT PRIMARY KEY AUTO_INCREMENT",
             "direccion VARCHAR(128)",
-            "estados VARCHAR(64)",
-            "ciudad VARCHAR(64)",
-            "urbanizacion VARCHAR(128)",
-            "calle VARCHAR(64)"
+            "estado VARCHAR(64)",
+            "ciudad VARCHAR(64)"
         ],
         "datos_de_contacto" : [
             "id INT PRIMARY KEY AUTO_INCREMENT",
@@ -49,7 +47,7 @@
             "apellidos VARCHAR(256)",
             "cedula VARCHAR(20)",
             "rif VARCHAR(32)",
-            "fecha_nacimiento DATETIME",
+            "fecha_nacimiento VARCHAR(24)",
             "FOREIGN KEY (direccion_id) REFERENCES datos_de_direccion(id)",
             "FOREIGN KEY (contacto_id) REFERENCES datos_de_contacto(id)"
         ],
