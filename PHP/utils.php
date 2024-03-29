@@ -106,9 +106,17 @@
             //TODO
             return true;
         }
-        public static function lastname($value, $minLength = 3, $maxLength = 256){
-            //TODO
-            return true;
+        public static function lastname(&$value, $minLength = 3, $maxLength = 256){
+            if(self::string($value, $maxLength, $minLength)){
+                $arr = explode(" ", $value);
+                foreach ($arr as $indx => $value) {
+                    $arr[$indx] = strtolower($value);
+                    $arr[$indx][0] = strtoupper($value[0]);
+                }
+                $value = implode(" ", $arr);
+                return true;
+            }
+            return false;
         }
         public static function birthdate($value, $minLength = 3, $maxLength = 256){
             return self::date($value);
@@ -138,7 +146,7 @@
             return preg_match($regex, $value);
         }
         public static function rif($value){
-            $regex = "/^[VE]-\d{5,20}$/i";
+            $regex = "/^[J]-\d{5,20}$/i";
             return preg_match($regex, $value);
         }
         public static function description($value, int $minLength = 0,$maxLength = 65535){
@@ -182,7 +190,7 @@
         static $table_header = "<table border=\"1\">";
 
         public static function matrix2table(array $matrix, array $columnsNames = null){
-            if($columnsNames === null) $columnsNames = array_keys($matrix[0]);
+            if($columnsNames === null and $matrix) $columnsNames = array_keys($matrix[0]);
             $result = self::$table_header;
             if(!empty($columnsNames))$result .= "<thead>".self::array2table($columnsNames,false)."</thead>";
             $result .= "<tbody>";
@@ -258,7 +266,10 @@
 
     class URL {
         public static function baseURL() : String {
-            return (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]" . self::baseURI();
+            return (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]";
+        }
+        public static function URL() : String {
+            return self::baseURL() . self::baseURI();
         }
         public static function baseURI($base = null) : String {
             if($base === null)$base = $_SERVER['REQUEST_URI'];
