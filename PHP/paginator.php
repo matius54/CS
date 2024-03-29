@@ -1,6 +1,6 @@
 <?php
-    require_once "./db.php";
-    require_once "./utils.php";
+    require_once "db.php";
+    require_once "utils.php";
     
     class Paginator {
         private static $ItemsPerPage = 10;
@@ -87,6 +87,13 @@
                 if(strtoupper($value) === "FROM") return $sql[$key + 1];
             }
             return null;
+        }
+
+        public function toArray() : array {
+            return [
+                "items" => $this->items,
+                "navigator" => $this->navigator
+            ];
         }
     }
 ?>
