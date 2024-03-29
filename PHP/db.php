@@ -379,8 +379,12 @@ class DB
      * @return bool `true` si la transacción se deshace correctamente, `false` en caso de error.
      */
     public function rollback(): bool
-    {
-        return $this->conn->rollback();
+    {   
+        try {
+            return $this->conn->rollback();
+        } catch (PDOException $e){
+            return false;
+        }
     }
 
     /**
@@ -410,5 +414,9 @@ class DB
     public function error(): bool
     {
         return $this->error;
+    }
+    public function getLastId(string $tableName, string $idName = "id") : int|null {
+        $this->execute("SELECT $idName FROM $tableName ORDER BY id DESC LIMIT 1 OFFSET 0",[]);
+        return $this->fetch()[$idName] ?? null;
     }
 }
