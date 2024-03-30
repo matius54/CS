@@ -138,7 +138,7 @@ class DB
      *
      * @return int valor del `PDO::PARAM` correspondiente al `$param`.
      */
-    private function getBindType(int|string|bool|object $param): int
+    private function getBindType(int|string|bool|File|null $param): int
     {
         if (is_int($param)) {
             return PDO::PARAM_INT;
@@ -260,7 +260,7 @@ class DB
      *
      * @return void
      */
-    public function execute(string $sql, string|int|float|bool|array|File ...$arg): void
+    public function execute(string $sql, string|int|float|bool|array|null|File ...$arg): void
     {
         //esto es un arreglo para hacer que se
         //puedan insertar float en la base de datos.
