@@ -21,7 +21,7 @@ include "components/header.php";
                 <img src="components/images.webp" alt="logo universidad">
             </div>
         </div>
-        <button type="submit" class="btn m-auto w-25">Iniciar Sesión</button>
+        <button type="submit" class="button btn m-auto w-25">Iniciar Sesión</button>
     </fieldset>
 </form>
 
