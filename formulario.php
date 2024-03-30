@@ -1,6 +1,10 @@
 <?php
+    
     $title = "Formulario";
+    require_once "php/ve.php";
+    require_once "php/utils.php";
     include "components/header.php";
+    if($userId):
 ?>
 
 <form action="php/profesor.php?action=setdata" method="post" class="container d-grid text-align-center">
@@ -42,22 +46,31 @@
                 <input type="text" class="form-control" name="address" id="direccion" placeholder="" />
                 <label for="direccion">Direccion</label>
             </div>
-
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" name="state" id="estado" placeholder="" />
+                <?php
+                    $ve = new Ve;
+                    $states = $ve->states();
+                    echo HTML::array2list($states,["name"=>"state","id"=>"estado","class"=>"form-control"], "selecciona el estado", sameValueName: true);
+                ?>
                 <label for="estado">Estado</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" name="city" id="ciudad" placeholder="" />
+                <select name="city" id="ciudad" class="form-control" disabled></select>
                 <label for="ciudad">Ciudad</label>
             </div>
         </fieldset>
     </div>
-    <button type="submit" class="btn w-25 m-auto">
-        Guardar Datos
-    </button>
+    <input type="submit" value="Guardar Datos" class="button btn w-25 m-auto">
 </form>
-
+<script src="js/ajax.js"></script>
+<script src="js/ve.js"></script>
+<script src="js/list.js"></script>
+<script>
+    const ve = new Ve(document.querySelector("select[name=\"state\"]"), document.querySelector("select[name=\"city\"]"));
+</script>
+<?php else: ?>
+    <i>Inicia sesion primero...</i>
 <?php
+    endif;
     include "components/footer.php";
 ?>
