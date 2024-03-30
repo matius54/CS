@@ -6,7 +6,7 @@
     //modelo (la clase)
     class Profesor {
         private static string $sessionKey = "user";
-        private static string $select = "SELECT username, nombre AS firstname, apellidos AS lastname, cedula AS ci, rif, fecha_nacimiento AS birthdate, telefono AS phone, correo AS email, direccion AS address, estado AS state, ciudad AS city from profesores AS p LEFT JOIN datos_personales AS dp ON personales_id = dp.id LEFT JOIN datos_de_contacto AS dc ON contacto_id = dc.id LEFT JOIN datos_de_direccion AS dd ON direccion_id = dd.id";
+        private static string $select = "SELECT p.id AS id, username, nombre AS firstname, apellidos AS lastname, cedula AS ci, rif, fecha_nacimiento AS birthdate, telefono AS phone, correo AS email, direccion AS address, estado AS state, ciudad AS city from profesores AS p LEFT JOIN datos_personales AS dp ON personales_id = dp.id LEFT JOIN datos_de_contacto AS dc ON contacto_id = dc.id LEFT JOIN datos_de_direccion AS dd ON direccion_id = dd.id";
         private static array $fields = [
             "firstname", 
             "lastname", 
@@ -154,7 +154,7 @@
 
             $username = $data["username"];
             $password = $data["password"];
-            if(!VALIDATE::username($username) or !VALIDATE::password($password)) return null;
+            if(!VALIDATE::username($username) or !VALIDATE::password($password)) throw new Error("Campos invalidos");
 
             $db = DB::getInstance();
             $db->execute("SELECT HEX(salt) AS salt FROM profesores WHERE username = ?", $username);
@@ -191,8 +191,9 @@
             return json_encode($arr);
         }
     }
-    
     //controlador
+    if(!isset($_SESSION)) session_start();
+
     $action = URL::decode("action",$_GET);
     $data = URL::decodeAll($_POST);
     try{
@@ -218,7 +219,12 @@
         }
         if($action === "paginate"){
             $profesors = Profesor::getAll();
-            JSON::sendJson($profesors->toArray());
+            $_SESSION["view"] = json_encode([
+                "dname" => "Profesores",
+                "name" => "profesor",
+                "items" => $profesors
+            ]);
+            URL::redirect("../view.php");
         }else{
             URL::redirect("../");
         }
