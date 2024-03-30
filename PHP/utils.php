@@ -211,12 +211,17 @@
         
         public static function array2list(
             array $array,
-            string $name = "select",
+            array $extra = ["name"=>"select"],
             ?string $title = null,
             $selected = null,
             $sameValueName = false
             ) : string {
-            $result = "<select name=\"$name\">";
+            $result = "<select ";
+            foreach ($extra as $key => $value) {
+                //TODO este codigo esta raroso MMMMMMMMMM
+                $result .= "$key=\"$value\" ";
+            }
+            $result .= ">";
             if($title !== null and is_string($title))
                 $result .= "<option value=\"\">--- $title ---</option>";
             foreach ($array as $value => $dname) {

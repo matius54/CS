@@ -1,23 +1,15 @@
-function htmlList(
-    array = [],
-    name = "select", 
-    title = null, 
-    selected = null,
-    sameValueName = false
-    ){
-    const select = document.createElement("select");
-    select.name = name;
-    if(title){
-        const option = document.createElement("option");
-        option.innerText = `--- ${title} ---`;
-        select.appendChild(option);
+function htmlList(el, array = [], msg){
+    el.querySelectorAll("option").forEach(e => e.remove());
+    if(typeof(msg) === "string"){
+        const opt = document.createElement("option");
+        opt.innerText = `--- ${msg} ---`;
+        opt.setAttribute("value","");
+        el.appendChild(opt);
     }
-    array.forEach((value, idx) => {
+    array.forEach(value => {
         const option = document.createElement("option");
-        if(value === selected)option.setAttribute("selected","selected");
-        option.value = sameValueName ? value : idx;
+        option.setAttribute("value",value);
         option.innerText = value;
-        select.appendChild(option);
+        el.appendChild(option);
     });
-    return select;
 }
