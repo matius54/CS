@@ -68,6 +68,18 @@
         }
     }
     class VALIDATE {
+        private static string $latin = "[\wñáéíóúÑÁÉÍÓÚ]";
+        private static function validarlatino(&$value){
+            $regex = "/^".self::$latin."+( ".self::$latin."+)?$/";
+            $arr = explode(" ", $value);
+            foreach ($arr as $indx => $value) {
+                $arr[$indx] = strtolower($value);
+                if(!$value) continue;
+                $arr[$indx][0] = strtoupper($value[0]);
+            }
+            $value = implode(" ", $arr);
+            return preg_match($regex,$value);
+        }
         public static function string($value,$maxLength=1024,$minLength=0,$length=null) : bool {
             if(isset($value) && is_string($value)){
                 $strlength = strlen($value);
@@ -97,49 +109,30 @@
             return self::string($value, $maxLength, $minLength);
         }
         public static function username($value, $minLength = 3, $maxLength = 256){
-            return self::string($value, $maxLength, $minLength);
+            $regex = "/^\w{1,64}$/";
+            return preg_match($regex, $value);
         }
         public static function name($value, $minLength = 3, $maxLength = 256){
             return self::string($value, $maxLength, $minLength);
         }
-        public static function firstname($value, $minLength = 3, $maxLength = 256){
-            //TODO
-            return true;
+        public static function firstname(&$value, $minLength = 3, $maxLength = 256){
+            if(self::string($value, $maxLength, $minLength)){
+                return self::validarlatino($value);
+            }
+            return false;
         }
         public static function lastname(&$value, $minLength = 3, $maxLength = 256){
             if(self::string($value, $maxLength, $minLength)){
-                $arr = explode(" ", $value);
-                foreach ($arr as $indx => $value) {
-                    $arr[$indx] = strtolower($value);
-                    $arr[$indx][0] = strtoupper($value[0]);
-                }
-                $value = implode(" ", $arr);
-                return true;
+                return self::validarlatino($value);
             }
             return false;
         }
         public static function birthdate($value, $minLength = 3, $maxLength = 256){
             return self::date($value);
         }
-        public static function address($value){
-            //TODO
-            return true;
-        }
         public static function date($value){
-            //TODO
-            return true;
-        }
-        public static function phone($value){
-            //TODO
-            return true;
-        }
-        public static function state($value){
-            //TODO
-            return true;
-        }
-        public static function city($value){
-            //TODO
-            return true;
+            $regex = "/^(20|19)\d{2,2}-[0-1]\d-[0-3]\d$/";
+            return preg_match($regex, $value);
         }
         public static function ci($value){
             $regex = "/^[VE]-\d{5,15}$/i";
@@ -165,8 +158,12 @@
             return self::string($value, null, null, $length) && ctype_xdigit($value);
         }
         public static function email($value, int $maxLength = 100){
+            $regex = "/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/";
             if(self::string($value, $maxLength)){
-                if(filter_var($value, FILTER_VALIDATE_EMAIL)) return true;
+                if(
+                    filter_var($value, FILTER_VALIDATE_EMAIL) and
+                    preg_match($regex, $value)
+                ) return true;
             }
             return false;
         }

@@ -3,6 +3,26 @@
     require_once "utils.php";
     require_once "paginator.php";
 
+    //validacion extra, especifica para los profesores
+    class V extends VALIDATE {
+        public static function address($value){
+            //TODO
+            return true;
+        }
+        public static function phone($value){
+            //TODO
+            return true;
+        }
+        public static function state($value){
+            //validacion inecesaria
+            return true;
+        }
+        public static function city($value){
+            //validacion inecesaria
+            return true;
+        }
+    }
+
     //modelo (la clase)
     class Profesor {
         private static string $sessionKey = "user";
@@ -47,7 +67,7 @@
         public function setData(array $data){
             foreach (self::$fields as $field) {
                 $fdata = $data[$field] ?? null;
-                $this->$field = VALIDATE::$field($fdata) ? $fdata : null;
+                $this->$field = V::$field($fdata) ? $fdata : null;
             }
         }
         public function load(){
@@ -189,6 +209,9 @@
                 $arr[$field] = $this->$field;
             }
             return json_encode($arr);
+        }
+        public function delete(int $id){
+            //TODO
         }
     }
     //controlador
