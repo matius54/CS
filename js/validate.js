@@ -40,7 +40,6 @@ class Validate {
     validate(event){
         //valores de configuracion
         const MATCH = "match";
-        const DIVIDER = "_";
         const regex = {
             text : /[A-Za-z ñáéíóúÑÁÉÍÓÚ]+/g,
             username : /^\w{1,64}/,
@@ -64,8 +63,8 @@ class Validate {
         let valid;
         let test;
         //validacion
-        if(element.id) key = element.id.split(DIVIDER)[0];
-        if(element.name) key = element.name.split(DIVIDER)[0];
+        if(element.id) key = element.id;
+        if(element.name) key = element.name;
         if((test = regex[key]) && value){
             if(typeof element.getAttribute(MATCH) === "string"){
                 const val = value.match(test);
