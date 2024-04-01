@@ -68,7 +68,7 @@
         }
     }
     class VALIDATE {
-        private static string $latin = "[\wñáéíóúÑÁÉÍÓÚ]";
+        protected static string $latin = "[\wñáéíóúÑÁÉÍÓÚ]";
         private static function validarlatino(&$value){
             $regex = "/^".self::$latin."+( ".self::$latin."+)?$/";
             $arr = explode(" ", $value);
@@ -158,7 +158,7 @@
             return self::string($value, null, null, $length) && ctype_xdigit($value);
         }
         public static function email($value, int $maxLength = 100){
-            $regex = "/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/";
+            $regex = "/^\w+@\w+\.\w{2,}$/";
             if(self::string($value, $maxLength)){
                 if(
                     filter_var($value, FILTER_VALIDATE_EMAIL) and

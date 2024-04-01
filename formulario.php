@@ -67,8 +67,9 @@ if ($userId) :
     <script src="js/list.js"></script>
     <script src="js/validate.js"></script>
     <script>
-        const ve = new Ve(document.querySelector("select[name=\"state\"]"), document.querySelector("select[name=\"city\"]"));
-        const v = new Validate;
+        const origen = document.querySelector("select[name=\"state\"]");
+        const destino = document.querySelector("select[name=\"city\"]");
+        const ve = new Ve(origen, destino);
     </script>
 <?php else : ?>
     <i>Inicia sesion primero...</i>

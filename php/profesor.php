@@ -6,12 +6,12 @@
     //validacion extra, especifica para los profesores
     class V extends VALIDATE {
         public static function address($value){
-            //TODO
-            return true;
+            $regex = "/^".parent::$latin."+( ".parent::$latin."+){0,}$/";
+            return preg_match($regex, $value);
         }
         public static function phone($value){
-            //TODO
-            return true;
+            $regex = "/^(\+58|0) ?(414|424|416|241) ?\d{7}$/";
+            return preg_match($regex, $value);
         }
         public static function state($value){
             //validacion inecesaria

@@ -4,6 +4,7 @@ class Validate {
             form.querySelectorAll("input").forEach((e) => this.addListeners(e));
             form.querySelectorAll("list").forEach((e) => this.addListeners(e));
             form.querySelectorAll("textarea").forEach((e) => this.addListeners(e));
+            form.querySelectorAll("select").forEach((e) => this.addListeners(e));
         });
     }
     listeners(element,listener = this.validate){
@@ -40,18 +41,20 @@ class Validate {
         //valores de configuracion
         const MATCH = "match";
         const DIVIDER = "_";
-        const LATIN = /^[\wñáéíóúÑÁÉÍÓÚ]+( [\wñáéíóúÑÁÉÍÓÚ]+)?$/;
         const regex = {
             text : /[A-Za-z ñáéíóúÑÁÉÍÓÚ]+/g,
             username : /^\w{1,64}/,
             password : /^.{8,}$/,
-            firstname : LATIN,
-            lastname : LATIN,
-            email : /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/,
+            firstname : /^[\wñáéíóúÑÁÉÍÓÚ]+( [\wñáéíóúÑÁÉÍÓÚ]+)?$/,
+            lastname : /^[\wñáéíóúÑÁÉÍÓÚ]+( [\wñáéíóúÑÁÉÍÓÚ]+)?$/,
+            email : /^\w+@\w+\.\w{2,}$/,
             birthdate : /^(20|19)\d{2,2}-[0-1]\d-[0-3]\d$/,
             rif : /^[J](-| )?\d{5,20}$/i,
             ci : /^[VE](-| )?\d{5,15}$/i,
-            phone : /^(\+58 |0)(414|424|416|241) ?\d{7,7}$/
+            phone : /^(\+58|0) ?(414|424|416|241) ?\d{7}$/,
+            address : /^[\wñáéíóúÑÁÉÍÓÚ]+( [\wñáéíóúÑÁÉÍÓÚ]+){0,}$/,
+            state : /^.+$/,
+            city : /^.+$/
         };
         //constantes y variables
         const element = event.target;
