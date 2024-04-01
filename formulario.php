@@ -55,7 +55,7 @@ if ($userId) :
                     <label for="estado">Estado</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <select name="city" id="ciudad" class="form-control" disabled></select>
+                    <?= HTML::array2list([], ["name" => "city", "id" => "ciudad", "class" => "form-control", "disabled" => "disabled"], sameValueName: true) ?>
                     <label for="ciudad">Ciudad</label>
                 </div>
             </fieldset>
