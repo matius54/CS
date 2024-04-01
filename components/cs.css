@@ -20,15 +20,6 @@ body {
   text-align: center;
 }
 
-header {
-  position: absolute;
-  width: 6rem;
-  height: 5rem;
-  right: 5em;
-  display: flex;
-  flex-flow: row nowrap;
-  top: 0.5em;
-}
 header img {
   border-radius: 0.7rem 1rem;
   width: 100%;
@@ -55,6 +46,20 @@ nav {
 nav h1 {
   white-space: nowrap;
   color: #fff;
+}
+
+.img {
+  min-width: 6rem;
+  height: 5rem;
+  right: 5em;
+  display: flex;
+  top: 0.5em;
+}
+
+.img img{
+  border-radius: 0.7rem 1rem;
+  width: 100%;
+  background: #fff;
 }
 
 main {
@@ -143,3 +148,5 @@ table th {
 .navigator .selected {
   border: 2px white solid;
 }
+
+

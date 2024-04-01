@@ -1,5 +1,5 @@
 <?php
-if(!isset($_SESSION)) session_start();
+if (!isset($_SESSION)) session_start();
 $title = $title ?? "titulo";
 ?>
 <!DOCTYPE html>
@@ -15,19 +15,18 @@ $title = $title ?? "titulo";
 </head>
 
 <body>
-
-<header>
-    <img src="components/images.webp" alt="Logo">
-</header>
-<nav>
-    <h1><?= $title ?></h1>
-    <a href="./" class="button">Página principal</a>
-<?php if($userId = $_SESSION["user"] ?? null): ?>
-    <a href="php/profesor.php?action=logout" class="button">Cerrar sesion</a>
-<?php else: ?>
-    <a href="login.php" class="button">Iniciar sesion</a>
-<?php endif; ?>
-    <a href="formulario.php" class="button">Formulario de informacion</a>
-    <a href="register.php" class="button">Registrar profesor</a>
-</nav>
-<main>
+    <nav>
+        <h1><?= $title ?></h1>
+        <a href="./" class="button">Página principal</a>
+        <?php if ($userId = $_SESSION["user"] ?? null) : ?>
+            <a href="php/profesor.php?action=logout" class="button">Cerrar sesion</a>
+        <?php else : ?>
+            <a href="login.php" class="button">Iniciar sesion</a>
+        <?php endif; ?>
+        <a href="formulario.php" class="button">Formulario de informacion</a>
+        <a href="register.php" class="button">Registrar profesor</a>
+        <div class="img">
+            <img src="components/images.webp" alt="Logo">
+        </div>
+    </nav>
+    <main>

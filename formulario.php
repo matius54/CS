@@ -7,46 +7,46 @@ include "components/header.php";
 if ($userId) :
 ?>
 
-    <form action="php/profesor.php?action=setdata" method="post" class="container d-grid text-align-center">
+    <form action="php/profesor.php?action=setdata" method="post" class="container gap-4 d-grid text-align-center mt-5">
         <div class="row">
-            <fieldset class="col">
+            <fieldset class="col d-flex gap-4 flex-column">
                 <legend>Datos Personales</legend>
-                <div class="form-floating mb-3">
+                <div class="form-floating">
                     <input type="text" class="form-control" name="firstname" id="nombre" placeholder="" />
                     <label for="nombre">Nombres</label>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="form-floating">
                     <input type="text" class="form-control" name="lastname" id="apellido" placeholder="" />
                     <label for="apellido">Apellidos</label>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="form-floating">
                     <input type="text" class="form-control" name="ci" id="cedula" placeholder="" />
                     <label for="cedula">Cedula</label>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="form-floating">
                     <input type="text" class="form-control" name="rif" id="rif" placeholder="" />
                     <label for="rif">Rif</label>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="form-floating">
                     <input type="date" class="form-control" name="birthdate" id="fecha" placeholder="1994" />
                     <label for="fecha">Fecha de Nacimiento</label>
                 </div>
             </fieldset>
-            <fieldset class="col">
+            <fieldset class="col d-flex gap-4 flex-column">
                 <legend>Contacto</legend>
-                <div class="form-floating mb-3">
+                <div class="form-floating">
                     <input type="text" class="form-control" name="phone" id="telefono" placeholder="" />
                     <label for="telefono">Telefono</label>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="form-floating">
                     <input type="text" class="form-control" name="email" id="correo" placeholder="" />
                     <label for="correo">Correo</label>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="form-floating">
                     <input type="text" class="form-control" name="address" id="direccion" placeholder="" />
                     <label for="direccion">Direccion</label>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="form-floating">
                     <?php
                     $ve = new Ve;
                     $states = $ve->states();
@@ -54,7 +54,7 @@ if ($userId) :
                     ?>
                     <label for="estado">Estado</label>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="form-floating">
                     <select name="city" id="ciudad" class="form-control" disabled></select>
                     <label for="ciudad">Ciudad</label>
                 </div>
