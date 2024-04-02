@@ -13,20 +13,21 @@ require_once "./file.php";
     por defecto desactivado, pero se puede activar enviardole un true como argumento o un 
     (htmlspecialchars: true)
 */
-class DB {
+class DB
+{
     //esta variable guardara una unica instancia de esta clase,
     //ya que se trata de una clase singleton accesible a travez de DB::getInstance()
     private static ?DB $instance = null;
-    
+
     //ubicacion del archivo de configuracion
-    private String $configFile = "./db.json";
+    private String $configFile = "db.json"; /*----- Cambie la direccion antes era esta ./db.json -----*/
 
     //array del archivo de configuracion una vez decodificado del json
-    private Array $config;
+    private array $config;
 
     //variable de control de errores, solo sera true si ocurre un error
     private bool $error = false;
-    
+
     //esta variable guardara una instancia de PDO
     private ?PDO $conn = null;
 
@@ -39,14 +40,16 @@ class DB {
      *
      * @return DB
      */
-    static public function getInstance() : DB {
-        if(self::$instance == null){
+    static public function getInstance(): DB
+    {
+        if (self::$instance == null) {
             self::$instance = new DB;
         }
         return self::$instance;
     }
 
-    private function __construct(){
+    private function __construct()
+    {
         //se lee y decodifica el archivo de configuracion json en un array asociativo,
         //usando el parametro asociativo en `true` en la llamada de `json_decode()`
         /*
@@ -55,16 +58,15 @@ class DB {
             - añadir configuracion por defecto por si falta tambien
             - separar esta logica en otro metodo por ejemplo loadConfig()
         */
-        $this->config = json_decode(json: file_get_contents(filename: $this->configFile),associative: true);
-        try{
+        $this->config = json_decode(json: file_get_contents(filename: $this->configFile), associative: true);
+        try {
             //intenta conectar a la base de datos
             $this->connect();
             //si no hay errores
             $this->error = false;
-        }
-        catch(PDOException $e){
-            if($e->getCode() !== 1049){
-                $this->showException($e,"No se ha podido establecer la conexion con la base de datos");
+        } catch (PDOException $e) {
+            if ($e->getCode() !== 1049) {
+                $this->showException($e, "No se ha podido establecer la conexion con la base de datos");
                 die();
             }
             //si el error es 1049 significa que la base de datos no existe, entonces se crea usando el archivo json
@@ -72,7 +74,8 @@ class DB {
         }
     }
 
-    public function __destruct(){
+    public function __destruct()
+    {
         //no hay que olvidarse de cerrar la conexion al final, por suerte php se puede encargar de eso con el destructor
         $this->close();
     }
@@ -83,7 +86,8 @@ class DB {
      *
      * @return void
      */
-    private function initialize() : void {
+    private function initialize(): void
+    {
         //todos estos metodos usan la configuracion del json
         //crea la base de datos 
         $this->createDB();
@@ -104,27 +108,26 @@ class DB {
      * @return void
      */
     protected function showException(
-            PDOException $e,
-            ?string $message = null,
-            ?string $sql = null,
-            ?array $args = null
-        ) : void 
-    {
+        PDOException $e,
+        ?string $message = null,
+        ?string $sql = null,
+        ?array $args = null
+    ): void {
         $this->error = true;
-        if(!isset($this->config["showErrors"]) || $this->config["showErrors"] === false) return;
-        if($message)echo "<h1>$message.</h1>";
-        switch($e->getCode()){
+        if (!isset($this->config["showErrors"]) || $this->config["showErrors"] === false) return;
+        if ($message) echo "<h1>$message.</h1>";
+        switch ($e->getCode()) {
             case 2002:
-                echo "<h3>Revisa que el host este bien en en el archivo de configuracion: \"".$this->configFile."\".</h3>";
-            break;
+                echo "<h3>Revisa que el host este bien en en el archivo de configuracion: \"" . $this->configFile . "\".</h3>";
+                break;
             case 1045:
-                echo "<h3>Revisa que el usuario y contraseña esten bien en el archivo de configuracion: \"".$this->configFile."\".</h3>";
-            break;
+                echo "<h3>Revisa que el usuario y contraseña esten bien en el archivo de configuracion: \"" . $this->configFile . "\".</h3>";
+                break;
         }
-        if($sql)echo "<p>Solicitud SQL: $sql.</p>";
-        if($args)echo "<p>Argumentos SQL: [".implode(", ",$args)."].</p>";
-        echo "<p>Codigo de error: ".$e->getCode().".</p>";
-        echo "<p>Mensaje de error: ".$e->getMessage().".</p>";
+        if ($sql) echo "<p>Solicitud SQL: $sql.</p>";
+        if ($args) echo "<p>Argumentos SQL: [" . implode(", ", $args) . "].</p>";
+        echo "<p>Codigo de error: " . $e->getCode() . ".</p>";
+        echo "<p>Mensaje de error: " . $e->getMessage() . ".</p>";
     }
 
     /**
@@ -135,12 +138,13 @@ class DB {
      *
      * @return int valor del `PDO::PARAM` correspondiente al `$param`.
      */
-    private function getBindType(mixed $param) : int {
-        if(is_int($param)){
+    private function getBindType(int|string|bool|File|null $param): int
+    {
+        if (is_int($param)) {
             return PDO::PARAM_INT;
-        }else if(is_string($param)){
+        } else if (is_string($param)) {
             return PDO::PARAM_STR;
-        }else if(is_bool($param)){
+        } else if (is_bool($param)) {
             return PDO::PARAM_BOOL;
             /*
             NOTE:
@@ -150,7 +154,7 @@ class DB {
 
             y claro tambien falta probar a ver si esto funciona o no
             */
-        }else if($param instanceof File){
+        } else if ($param instanceof File) {
             return PDO::PARAM_LOB;
         }
         return PDO::PARAM_NULL;
@@ -162,8 +166,9 @@ class DB {
      *
      * @return void
      */
-    public function connect() : void {
-        $this->conn = new PDO("mysql:host=".$this->config["host"].";charset=utf8;dbname=".$this->config["database"], $this->config["username"], $this->config["password"]);
+    public function connect(): void
+    {
+        $this->conn = new PDO("mysql:host=" . $this->config["host"] . ";charset=utf8;dbname=" . $this->config["database"], $this->config["username"], $this->config["password"]);
     }
 
     /**
@@ -174,9 +179,10 @@ class DB {
      *
      * @return void
      */
-    private function createDB() : void {
+    private function createDB(): void
+    {
         //nueva conexion sin usar el nombre de la base de datos `$dbname`
-        $conn = new PDO("mysql:host=".$this->config["host"], $this->config["username"], $this->config["password"]);
+        $conn = new PDO("mysql:host=" . $this->config["host"], $this->config["username"], $this->config["password"]);
         //se toma el nombre desde el array de configuracion cargado
         $dbname = $this->config["database"];
         //usa el metodo `exec()` para crear la base de datos
@@ -193,17 +199,18 @@ class DB {
      *
      * @return void
      */
-    private function createTables() : void {
+    private function createTables(): void
+    {
         //por cada una de las tablas definidas en `structure`
         foreach ($this->config["structure"] as $table => $value) {
-            try{
+            try {
                 //construye el sql correspondiente y lo ejecuta de 1
                 //implode() hace que la lista quede en un solo string, en ese caso separado por comas ","
-                $this->conn->exec("CREATE TABLE IF NOT EXISTS `$table` (".implode(",",$value).")");
+                $this->conn->exec("CREATE TABLE IF NOT EXISTS `$table` (" . implode(",", $value) . ")");
                 //si no hay errores
                 $this->error = false;
-            }catch(PDOException $e){
-                $this->showException($e,"Ha ocurrido un error creando la tabla \"$table\" automaticamente");
+            } catch (PDOException $e) {
+                $this->showException($e, "Ha ocurrido un error creando la tabla \"$table\" automaticamente");
             }
         }
     }
@@ -214,14 +221,15 @@ class DB {
      *
      * @return void
      */
-    private function finally() : void {
-        foreach ($this->config["finally"] as $value){
-            try{
+    private function finally(): void
+    {
+        foreach ($this->config["finally"] as $value) {
+            try {
                 $this->conn->query($value);
                 //si no hay errores
                 $this->error = false;
-            }catch(PDOException $e){
-                $this->showException($e,"Ha ocurrido un error ejecutando el bloque finally",$value);
+            } catch (PDOException $e) {
+                $this->showException($e, "Ha ocurrido un error ejecutando el bloque finally", $value);
             }
         }
     }
@@ -231,7 +239,8 @@ class DB {
      *
      * @return void
      */
-    public function close() : void {
+    public function close(): void
+    {
         $this->conn = null;
     }
 
@@ -251,8 +260,23 @@ class DB {
      *
      * @return void
      */
-    public function execute(string $sql,array $arg=[]) : void {
-        try{
+    public function execute(string $sql, string|int|float|bool|array|null|File ...$arg): void
+    {
+        //esto es un arreglo para hacer que se
+        //puedan insertar float en la base de datos.
+        $index = 0;
+        if ($arg and is_array($arg[0])) $arg = $arg[0];
+        foreach ($arg as $key => $value) {
+            $index = strpos($sql, "?", $index + 1);
+            if (is_float($value) or is_double($value)) {
+                $a = substr($sql, 0, $index);
+                $b = substr($sql, $index + 1);
+                $sql = $a . $value . $b;
+                unset($arg[$key]);
+            }
+        }
+        $arg = array_values($arg);
+        try {
             $prepared = $this->conn->prepare($sql);
             foreach ($arg as $index => $value) {
                 $prepared->bindValue($index + 1, $value, $this->getBindType($value));
@@ -260,8 +284,8 @@ class DB {
             $prepared->execute();
             $this->result = $prepared;
             $this->error = false;
-        }catch(PDOException $e){
-            $this->showException($e,"Ha ocurrido un error ejecutando SQL",$sql,$arg);
+        } catch (PDOException $e) {
+            $this->showException($e, "Ha ocurrido un error ejecutando SQL", $sql, $arg);
         }
     }
 
@@ -275,11 +299,12 @@ class DB {
      *
      * @return array una fila del resultado, o un array vacio.
      */
-    public function fetch(bool $htmlspecialchars = false) : Array {
-        if($this->result === null) return [];
+    public function fetch(bool $htmlspecialchars = false): array
+    {
+        if ($this->result === null) return [];
         $result = $this->result->fetch(PDO::FETCH_ASSOC);
-        if(!is_array($result))$result = [];
-        if($htmlspecialchars){
+        if (!is_array($result)) $result = [];
+        if ($htmlspecialchars) {
             foreach ($result as $key => $value) {
                 $result[$key] = htmlspecialchars($value);
             }
@@ -297,12 +322,13 @@ class DB {
      *
      * @return array un array de todas las filas del resultado, o un array vacio.
      */
-    public function fetchAll(bool $htmlspecialchars = false) : Array {
-        if($this->result === null) return [];
+    public function fetchAll(bool $htmlspecialchars = false): array
+    {
+        if ($this->result === null) return [];
         $data = $this->result->fetchAll(PDO::FETCH_ASSOC);
-        if($htmlspecialchars && is_array($data)) {    
+        if ($htmlspecialchars && is_array($data)) {
             foreach ($data as $index => $element) {
-                if(!is_array($data)) continue;
+                if (!is_array($data)) continue;
                 foreach ($element as $key => $value) {
                     $element[$key] = htmlspecialchars($value);
                 }
@@ -320,8 +346,9 @@ class DB {
      *
      * @return int|null El número de filas afectadas o `null` si no aplica.
      */
-    public function rowCount() : int | null {
-        if($this->result === null) return null;
+    public function rowCount(): int | null
+    {
+        if ($this->result === null) return null;
         return $this->result->rowCount();
     }
 
@@ -336,7 +363,8 @@ class DB {
      *
      * @return bool `true` si la transacción se inicia correctamente, `false` en caso de error.
      */
-    public function beginTransaction() : bool {
+    public function beginTransaction(): bool
+    {
         return $this->conn->beginTransaction();
     }
 
@@ -350,8 +378,13 @@ class DB {
      *
      * @return bool `true` si la transacción se deshace correctamente, `false` en caso de error.
      */
-    public function rollback() : bool {
-        return $this->conn->rollback();
+    public function rollback(): bool
+    {   
+        try {
+            return $this->conn->rollback();
+        } catch (PDOException $e){
+            return false;
+        }
     }
 
     /**
@@ -364,7 +397,8 @@ class DB {
      *
      * @return bool `true` si la transacción se confirma correctamente, `false` en caso de error.
      */
-    public function commit() : bool {
+    public function commit(): bool
+    {
         return $this->conn->commit();
     }
 
@@ -377,8 +411,12 @@ class DB {
      *
      * @return bool `true` si hay un error registrado, `false` en caso contrario.
      */
-    public function error() : bool {
+    public function error(): bool
+    {
         return $this->error;
     }
+    public function getLastId(string $tableName, string $idName = "id") : int|null {
+        $this->execute("SELECT $idName FROM $tableName ORDER BY id DESC LIMIT 1 OFFSET 0",[]);
+        return $this->fetch()[$idName] ?? null;
+    }
 }
-?>
